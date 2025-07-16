@@ -1,24 +1,20 @@
-from flask import Flask, render_template, request, redirect, url_for
-import fbextract,os, platform
+from flask import Flask, render_template, request, redirect, url_for,flash
+import fbextract,os, platform, requests,json
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
+app.secret_key = '435343ku4vjjq3eqhdeql3545345ts2cgvfkdc'
 
 local_ip         = os.getenv('LOCAL_IP','192.168.10.9')
 server_port      = os.getenv('SERVER_PORT',3001)
+url_to_cloud     = os.getenv('URL_TO_CLOUD','http://192.168.10.5:8085/run')
 
 def get_db_connection():
-    # return firebirdsql.connect(
-    #     dsn='192.168.10.5/3053:cars_dev',
-    #     user='MONITOR',
-    #     password='inwino'
-    # )
     return fbextract.get_connection()
 
 @app.route('/')
 def index():
     q = request.args.get('q', '').strip()
-
     con = get_db_connection()
     cur = con.cursor()
     print(q)
@@ -154,9 +150,16 @@ def delete_car(id):
     con.close()
     return redirect(url_for('index'))
 
-#
-# if __name__ == '__main__':
-#     app.run(debug=True)
+@app.route('/run-external')
+def run_external():
+    try:
+        r = requests.get("http://192.168.10.5:8085/run", timeout=5)
+        result = json.loads(r.text) if r.text.startswith("[") else [r.text]
+        for line in result:
+            flash(line, "success")
+    except Exception as e:
+        flash(f"❌ Помилка: {e}", "danger")
+    return redirect(url_for('index'))
 
 if __name__ == "__main__":
     if platform.system() == 'Windows':
