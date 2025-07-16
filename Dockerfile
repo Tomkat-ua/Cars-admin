@@ -13,6 +13,6 @@ RUN apt-get update
 RUN apt-get install  libfbclient2 -y --no-install-recommends
 RUN pip install -r requirements.txt
 
-CMD [ "python3", "main.py" ]
+CMD [ "python3", "admin.py" ]
 
 
