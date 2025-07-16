@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Список автомобілів</h2>
+
+<form class="mb-3" method="get" action="/">
+  <div class="input-group">
+    <input type="text" class="form-control" name="q" placeholder="Пошук за номером..." value="{{ request.args.get('q', '') }}">
+    <button class="btn btn-outline-secondary" type="submit">Пошук</button>
+    <a href="{{ url_for('add_car') }}" class="btn btn-primary ms-2">+ Додати</a>
+  </div>
+</form>
+
+<table class="table table-bordered table-striped table-sm">
+  <thead class="table-dark">
+    <tr>
+      <th>ID</th>
+      <th>Військовий номер</th>
+      <th>Тип</th>
+      <th>Марка</th>
+      <th>Підрозділ</th>
+      <th>Статус</th>
+      <th>Стан</th>
+      <th>Місць</th>
+      <th>Колісна формула</th>
+      <th>Водій</th>
+      <th>Розташування</th>
+      <th>Примітки</th>
+      <th>Дії</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for car in cars %}
+    <tr>
+      <td>{{ car[0] }}</td>
+      <td>{{ car[1] }}</td>
+      <td>{{ car[2] }}</td>
+      <td>{{ car[3] }}</td>
+      <td>{{ car[4] }}</td>
+      <td>{{ car[5] }}</td>
+      <td>{{ car[6] }}</td>
+      <td>{{ car[7] }}</td>
+      <td>{{ car[8] }}</td>
+      <td>{{ car[9] }}</td>
+      <td>{{ car[10] }}</td>
+      <td>{{ car[11] }}</td>
+      <td>
+        <a href="{{ url_for('edit_car', id=car[0]) }}" class="btn btn-sm btn-warning">✏️</a>
+        <a href="{{ url_for('delete_car', id=car[0]) }}" class="btn btn-sm btn-danger" onclick="return confirm('Видалити?')">🗑</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

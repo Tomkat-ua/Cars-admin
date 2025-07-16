@@ -1,0 +1,82 @@
+{% extends "base.html" %}
+{% block content %}
+<h2 class="mb-4">Редагування автомобіля</h2>
+
+<form method="post" class="row g-3">
+  <div class="col-md-4">
+    <label class="form-label">Військовий номер</label>
+    <input type="text" name="mil_num" class="form-control" required value="{{ car[0] }}">
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Тип</label>
+    <select name="car_type_id" class="form-select" required>
+      {% for id, name in car_types %}
+        <option value="{{ id }}" {% if id == car[1] %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Підрозділ</label>
+    <select name="division_id" class="form-select" required>
+      {% for id, name in divisions %}
+        <option value="{{ id }}" {% if id == car[2] %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Статус</label>
+    <select name="status_id" class="form-select" required>
+      {% for id, name in statuses %}
+        <option value="{{ id }}" {% if id == car[3] %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Стан</label>
+    <select name="state_id" class="form-select" required>
+      {% for id, name in states %}
+        <option value="{{ id }}" {% if id == car[4] %}selected{% endif %}>{{ name }}</option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label class="form-label">Місць</label>
+    <input type="text" name="seats" class="form-control" value="{{ car[5] }}">
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Марка</label>
+    <input type="text" name="brand" class="form-control" value="{{ car[6] }}">
+  </div>
+
+  <div class="col-md-4">
+    <label class="form-label">Колісна формула</label>
+    <input type="text" name="w_form" class="form-control" value="{{ car[7] }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Водій</label>
+    <input type="text" name="driver" class="form-control" value="{{ car[8] }}">
+  </div>
+
+  <div class="col-md-6">
+    <label class="form-label">Розташування</label>
+    <textarea name="location" class="form-control" rows="2">{{ car[9] }}</textarea>
+  </div>
+
+  <div class="col-12">
+    <label class="form-label">Примітки</label>
+    <textarea name="notes" class="form-control" rows="3">{{ car[10] }}</textarea>
+  </div>
+
+  <div class="col-12 d-flex justify-content-between">
+    <a href="{{ url_for('index') }}" class="btn btn-secondary">↩️ Назад</a>
+    <button class="btn btn-success">💾 Зберегти</button>
+  </div>
+</form>
+{% endblock %}

@@ -1,0 +1,117 @@
+Супер! 🎉 Радію, що працює! Тепер перейдемо до редагування довідників.
+
+📋 Що треба для редагування довідників
+Наприклад, довідник d_status:
+
+sql
+Копіювати
+Редагувати
+CREATE TABLE D_STATUS (
+    STATUS_ID INTEGER PRIMARY KEY,
+    STATUS_NAME VARCHAR(100) NOT NULL
+);
+🔁 Стандартні маршрути для довідника:
+/dict/status – список всіх статусів
+
+/dict/status/add – додавання
+
+/dict/status/edit/<id> – редагування
+
+/dict/status/delete/<id> – видалення
+
+✅ Flask: приклад маршруту
+python
+Копіювати
+Редагувати
+@app.route('/dict/status')
+def list_statuses():
+    con = get_db_connection()
+    cur = con.cursor()
+    cur.execute("SELECT STATUS_ID, STATUS_NAME FROM D_STATUS ORDER BY STATUS_NAME")
+    statuses = cur.fetchall()
+    con.close()
+    return render_template('dict_status.html', statuses=statuses)
+
+@app.route('/dict/status/add', methods=['GET', 'POST'])
+def add_status():
+    if request.method == 'POST':
+        name = request.form['name']
+        con = get_db_connection()
+        cur = con.cursor()
+        cur.execute("INSERT INTO D_STATUS (STATUS_ID, STATUS_NAME) VALUES (NEXT VALUE FOR GEN_STATUS_ID, ?)", (name,))
+        con.commit()
+        con.close()
+        return redirect(url_for('list_statuses'))
+    return render_template('dict_edit.html', item=None, title='Додати статус')
+
+@app.route('/dict/status/edit/<int:id>', methods=['GET', 'POST'])
+def edit_status(id):
+    con = get_db_connection()
+    cur = con.cursor()
+    if request.method == 'POST':
+        name = request.form['name']
+        cur.execute("UPDATE D_STATUS SET STATUS_NAME = ? WHERE STATUS_ID = ?", (name, id))
+        con.commit()
+        con.close()
+        return redirect(url_for('list_statuses'))
+    cur.execute("SELECT STATUS_NAME FROM D_STATUS WHERE STATUS_ID = ?", (id,))
+    item = cur.fetchone()
+    con.close()
+    return render_template('dict_edit.html', item=item, title='Редагувати статус')
+
+@app.route('/dict/status/delete/<int:id>')
+def delete_status(id):
+    con = get_db_connection()
+    cur = con.cursor()
+    cur.execute("DELETE FROM D_STATUS WHERE STATUS_ID = ?", (id,))
+    con.commit()
+    con.close()
+    return redirect(url_for('list_statuses'))
+🧩 dict_status.html
+html
+Копіювати
+Редагувати
+{% extends 'base.html' %}
+{% block content %}
+<h2>Статуси</h2>
+<a href="{{ url_for('add_status') }}" class="btn btn-success mb-2">➕ Додати</a>
+<table class="table table-bordered table-striped">
+  <thead><tr><th>ID</th><th>Назва</th><th>Дії</th></tr></thead>
+  <tbody>
+    {% for id, name in statuses %}
+    <tr>
+      <td>{{ id }}</td>
+      <td>{{ name }}</td>
+      <td>
+        <a href="{{ url_for('edit_status', id=id) }}" class="btn btn-sm btn-warning">✏️</a>
+        <a href="{{ url_for('delete_status', id=id) }}" class="btn btn-sm btn-danger" onclick="return confirm('Видалити?')">🗑</a>
+      </td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
+🧩 dict_edit.html
+html
+Копіювати
+Редагувати
+{% extends 'base.html' %}
+{% block content %}
+<h2>{{ title }}</h2>
+<form method="post">
+  <div class="mb-3">
+    <label class="form-label">Назва</label>
+    <input name="name" class="form-control" required value="{{ item[0] if item else '' }}">
+  </div>
+  <button type="submit" class="btn btn-primary">💾 Зберегти</button>
+  <a href="{{ url_for('list_statuses') }}" class="btn btn-secondary">⬅ Назад</a>
+</form>
+{% endblock %}
+🔄 Повтори для інших довідників
+Можеш скопіювати ці маршрути для:
+
+/dict/type → D_CAR_TYPE
+
+/dict/state → D_STATE
+
+/dict/division → D_DIVISION
