@@ -6,7 +6,7 @@ WORKDIR /app
 
 COPY templates/*    /app/templates/
 COPY requirements.txt /app/
-COPY main.py /app/
+COPY admin.py /app/
 COPY fbextract.py /app/
 
 RUN apt-get update  
