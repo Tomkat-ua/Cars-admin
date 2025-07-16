@@ -1,2 +1,2 @@
-docker build -t tomkat/grobot:2  .
+docker build -t tomkat/cars-admin:1  .
 

@@ -1,6 +1,6 @@
-service=GRobot
+service=Cars-admin
 container=$service
-img=tomkat/grobot:2
+img=tomkat/cars-admin:1
 
 docker container stop $container
 docker container rm $container 
@@ -10,7 +10,6 @@ docker run -dt \
     -e DB_PATH=cars_dev \
     -e DB_USER=MONITOR \
     -e DB_PASSWORD=inwino \
-    -e DELAY=2 \
     --name=$container \
     -e TZ=Europe/Kyiv \
     --restart=always \
