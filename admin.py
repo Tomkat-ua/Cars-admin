@@ -7,7 +7,7 @@ app.secret_key = '435343ku4vjjq3eqhdeql3545345ts2cgvfkdc'
 
 local_ip         = os.getenv('LOCAL_IP','192.168.10.9')
 server_port      = os.getenv('SERVER_PORT',3001)
-url_to_cloud     = os.getenv('URL_TO_CLOUD','http://192.168.10.5:8085/run')
+url_to_cloud     = os.getenv('URL_TO_CLOUD','http://192.168.10.9:3000/run')
 
 def get_db_connection():
     return fbextract.get_connection()
@@ -28,10 +28,15 @@ def index():
             """, (f'{q}',))
     else:
         cur.execute("""
-            SELECT CAR_ID, MIL_NUM, CARTYPE_NAME, BRAND, DIVISION_NAME,
-                   STATUS_NAME, STATE_NAME, SEATS, W_FORM, DRIVER, LOCATION, NOTES
-            FROM V_CARS
-            ORDER BY CAR_ID
+    select
+    c.car_id,  c.mil_num,  t.cartype_name,  c.brand,  d.division_name, sta.status_name, ste.state_name,
+    c.seats,  c.w_form, c.driver, c.location, c.notes
+    from cars c
+        inner join d_cartype t  on t.cartype_id = c.car_type_id
+        inner join d_division d on d.division_id = c.division_id
+        inner join d_status sta on sta.status_id = c.status_id
+        inner join d_state  ste on ste.state_id  = c.state_id
+     ORDER BY c.CAR_ID
             """)
     cars = cur.fetchall()
     con.close()
@@ -153,7 +158,7 @@ def delete_car(id):
 @app.route('/run-external')
 def run_external():
     try:
-        r = requests.get("http://192.168.10.5:8085/run", timeout=5)
+        r = requests.get(url_to_cloud, timeout=20)
         result = json.loads(r.text) if r.text.startswith("[") else [r.text]
         for line in result:
             flash(line, "success")
