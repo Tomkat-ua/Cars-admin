@@ -1,10 +1,10 @@
 import  fdb,platform,os
 
-db_server        = os.getenv("DB_HOST", '192.168.10.5')
-db_port          = os.getenv("DB_PORT", 3053)
-db_path          = os.getenv("DB_PATH", 'cars_dev')
-db_user          = os.getenv("DB_USER", 'MONITOR')
-db_password      = os.getenv("DB_PASSWORD", 'inwino')
+db_server        = os.getenv("DB_HOST", 'host')
+db_port          = int(os.getenv("DB_PORT", 'port'))
+db_path          = os.getenv("DB_PATH", 'db_path')
+db_user          = os.getenv("DB_USER", 'user')
+db_password      = os.getenv("DB_PASSWORD", 'password')
 
 def get_connection():
     if platform.system() == 'Windows':

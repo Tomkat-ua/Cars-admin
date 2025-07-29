@@ -3,11 +3,12 @@ import fbextract,os, platform, requests,json
 from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
-app.secret_key = '435343ku4vjjq3eqhdeql3545345ts2cgvfkdc'
+app.secret_key = os.getenv("PUSH_KEY")
+    # '435343ku4vjjq3eqhdeql3545345ts2cgvfkdc'
 
 local_ip         = os.getenv('LOCAL_IP','192.168.10.9')
 server_port      = os.getenv('SERVER_PORT',3001)
-url_to_cloud     = os.getenv('URL_TO_CLOUD','http://192.168.10.9:3000/run')
+url_to_cloud     = os.getenv('URL_TO_CLOUD')
 
 def get_db_connection():
     return fbextract.get_connection()
