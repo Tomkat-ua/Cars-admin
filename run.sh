@@ -11,5 +11,7 @@ docker run -dt \
     --name=$container \
     --env-file .env \
     -e TZ=Europe/Kyiv \
+    -e APP_VERSION=$ver \
     --restart=always \
+
     $img
