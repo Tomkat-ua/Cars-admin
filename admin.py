@@ -4,7 +4,6 @@ from gevent.pywsgi import WSGIServer
 
 app = Flask(__name__)
 app.secret_key = os.getenv("PUSH_KEY")
-    # '435343ku4vjjq3eqhdeql3545345ts2cgvfkdc'
 
 local_ip         = os.getenv('LOCAL_IP','192.168.10.9')
 server_port      = os.getenv('SERVER_PORT',3001)
