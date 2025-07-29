@@ -13,5 +13,4 @@ docker run -dt \
     -e TZ=Europe/Kyiv \
     -e APP_VERSION=$ver \
     --restart=always \
-
     $img
