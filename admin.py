@@ -9,6 +9,10 @@ local_ip         = os.getenv('LOCAL_IP','192.168.10.9')
 server_port      = os.getenv('SERVER_PORT',3001)
 url_to_cloud     = os.getenv('URL_TO_CLOUD')
 
+@app.context_processor
+def inject_globals():
+    return dict(app_version=os.getenv("APP_VERSION"))
+
 def get_db_connection():
     return fbextract.get_connection()
 
