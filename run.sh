@@ -13,6 +13,7 @@ docker run -dt \
     -e DB_USER=MONITOR \
     -e DB_PASSWORD=inwino \
     --name=$container \
+    --env-file .env \
     -e TZ=Europe/Kyiv \
     --restart=always \
     $img
